@@ -3,6 +3,8 @@ import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useDispatch, useSelector } from "react-redux";
+import {login} from '../redux/apiCalls'
 
 const Login = () => {
   const [toggle, setToggle] = useState(false);
@@ -10,6 +12,9 @@ const Login = () => {
     email: "",
     password: "",
   });
+
+  const dispatch = useDispatch();
+    const { user, isFetching, error } = useSelector((state) => state.user);
 
   // handleChange
   const handleChange = (e) => {
@@ -34,10 +39,14 @@ const Login = () => {
         position: "top-center",
       });
     } else {
+      const {email, password} = userData
       // API CALL
-      console.log(userData);
+      login(dispatch, {email, password })
     }
   };
+
+
+  console.log(`main access user : `, user)
 
   return (
     <>
@@ -81,7 +90,7 @@ const Login = () => {
                 </Button>
               </div>
               <p className="text-center my-1">
-                Don't have an account? Please
+                Do not have an account? Please
                 <Link to={`/register`} className="mx-1">
                   Register Now
                 </Link>
