@@ -44,19 +44,19 @@ const SingleEvent = () => {
     photo,
   } = event;
 
-// update event api call
+  // update event api call
   const updateEvent = async () => {
     try {
       await axios.put(`http://localhost:4000/api/events/${event._id}`, {
         username: currentUser.username,
         title,
         description,
-        location
+        location,
       });
-      setUpdateMode(false)
-        navigate("/");
+      setUpdateMode(false);
+      navigate("/");
     } catch (err) {
-      console.log(err.message)
+      console.log(err.message);
     }
   };
 
@@ -71,8 +71,6 @@ const SingleEvent = () => {
       console.log(err.message);
     }
   };
-
-
 
   return (
     <>
@@ -190,7 +188,10 @@ const SingleEvent = () => {
 
           {updateMode && (
             <div className="my-3">
-              <button className="bg-success text-white px-4 py-1 btn" onClick={updateEvent}>
+              <button
+                className="bg-success text-white px-4 py-1 btn"
+                onClick={updateEvent}
+              >
                 Update Event
               </button>
             </div>

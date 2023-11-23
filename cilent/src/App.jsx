@@ -9,7 +9,6 @@ import Home from "./pages/events";
 import Register from "./pages/register";
 import Login from "./pages/login";
 import CreateEvent from "./pages/createEvent";
-import UpdateEvent from "./pages/updateEvent";
 import Footer from "./components/Footer";
 import NotFound from "./components/NotFound";
 import SingleEvent from "./pages/SingleEvent";
@@ -25,7 +24,6 @@ const App = () => {
           <Route path="/login" exact element={<Login />} />
           <Route path="/create-event" exact element={<CreateEvent />} />
           <Route path="/event/:id" exact element={<SingleEvent />} />
-          <Route path="/edit-event/:id" exact element={<UpdateEvent />} />
           {/* error routing */}
           <Route path="/*" exact element={<NotFound />} />
         </Routes>

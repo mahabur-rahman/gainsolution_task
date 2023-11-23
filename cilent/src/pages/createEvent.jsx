@@ -4,45 +4,39 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const CreateEvent = () => {
-  const [eventInfo, setEventInfo] = useState({
-    title: "",
-    description: "",
-    startDate: "",
-    endDate: "",
-    location: "",
-  });
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [location, setLocation] = useState("");
+  const [file, setFile] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEventInfo({ ...eventInfo, [name]: value });
-  };
-
-  const registerUser = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // validation of input field
-    if (eventInfo.title === "") {
+    if (title === "") {
       toast.warning("Event title is required", {
         position: "top-center",
       });
-    } else if (eventInfo.description === "") {
+    } else if (description === "") {
       toast.error("Description is required", {
         position: "top-center",
       });
-    } else if (eventInfo.startDate === "") {
+    } else if (startDate === "") {
       toast.warning("Choose start date", {
         position: "top-center",
       });
-    } else if (eventInfo.endDate === "") {
+    } else if (endDate === "") {
       toast.error("Choose end date", {
         position: "top-center",
       });
-    } else if (eventInfo.location === "") {
+    } else if (location === "") {
       toast.error("Write your actual location", {
         position: "top-center",
       });
     } else {
       // api call
-      console.log(eventInfo);
+      console.log(title, description, startDate, endDate, file, location)
     }
   };
 
@@ -52,14 +46,13 @@ const CreateEvent = () => {
         <h3 className="text-center my-3">Create An Event</h3>
         <Row>
           <Col xl={6} lg={6} md={6} className="mx-auto">
-            <Form>
+            <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3" controlId="eventTitle">
                 <Form.Label>Event Title :</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Write event title"
-                  name="title"
-                  onChange={handleChange}
+                  onChange={(e) => setTitle(e.target.value)}
                 />
               </Form.Group>
 
@@ -69,18 +62,16 @@ const CreateEvent = () => {
                   as="textarea"
                   rows={3}
                   placeholder="Description"
-                  name="description"
-                  onChange={handleChange}
+                  onChange={(e) => setDescription(e.target.value)}
                 />
               </Form.Group>
 
-              <div className="d-flex items-center justify-content-between w-75">
+              <div className="d-flex items-center justify-content-between">
                 <Form.Group className="mb-3" controlId="startDate">
                   <Form.Label>Start Date :</Form.Label>
                   <Form.Control
                     type="date"
-                    name="startDate"
-                    onChange={handleChange}
+                    onChange={(e) => setStartDate(e.target.value)}
                   />
                 </Form.Group>
 
@@ -88,8 +79,16 @@ const CreateEvent = () => {
                   <Form.Label>End Date :</Form.Label>
                   <Form.Control
                     type="date"
-                    name="endDate"
-                    onChange={handleChange}
+                    onChange={(e) => setEndDate(e.target.value)}
+                  />
+                </Form.Group>
+
+                <Form.Group controlId="formFile" className="mb-3">
+                  <Form.Label>Choose File</Form.Label>
+                  <Form.Control
+                    type="file"
+                    size="sm"
+                    onChange={(e) => setFile(e.target.files[0])}
                   />
                 </Form.Group>
               </div>
@@ -99,8 +98,7 @@ const CreateEvent = () => {
                 <Form.Control
                   type="text"
                   placeholder="Location"
-                  name="location"
-                  onChange={handleChange}
+                  onChange={(e) => setLocation(e.target.value)}
                 />
               </Form.Group>
 
@@ -108,7 +106,6 @@ const CreateEvent = () => {
                 <Button
                   variant="secondary"
                   type="submit"
-                  onClick={registerUser}
                 >
                   Create Event
                 </Button>
