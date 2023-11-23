@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { Card, Col, Badge, Container, Row } from "react-bootstrap";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams , Link} from "react-router-dom";
 import axios from "axios";
 import { FaTrashCan } from "react-icons/fa6";
 import { MdOutlineEdit } from "react-icons/md";
-import {Link} from 'react-router-dom'
+import {useSelector} from 'react-redux'
 
 const SingleEvent = () => {
   const [event, setEvent] = useState({});
   const { id } = useParams();
+
+  const {currentUser} = useSelector(state => state.user)
 
   useEffect(() => {
     const getSingleEvent = async () => {
@@ -55,6 +57,7 @@ const SingleEvent = () => {
                   <span className="mx-1">Author : </span>
                   <Link to={`/?user=${username}`}>{username}</Link>
                 </div>
+                {event.username === currentUser.username && (
                 <div>
                   {/* actions */}
                   <div className="text-danger mb-3">
@@ -67,6 +70,8 @@ const SingleEvent = () => {
                   </div>
                   {new Date(createdAt).toDateString()}
                 </div>
+
+                )}
               </div>
               <Card.Body>
                 <Card.Title>{title}</Card.Title>
