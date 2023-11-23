@@ -73,11 +73,34 @@ const getEvent =  async (req, res) => {
   }
 
 //   get all events 
+const getAllEvents = async (req, res) => {
+    const username = req.query.user;
+    const catName = req.query.cat;
+    try {
+      let events;
+      if (username) {
+        events = await Event.find({ username });
+      } else if (catName) {
+        events = await Event.find({
+          categories: {
+            $in: [catName],
+          },
+        });
+      } else {
+        events = await Event.find();
+      }
+
+      return res.status(200).json(events);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  }
+
 
 module.exports = {
   createEvent,
   updateEvent,
   deleteEvent,
-  getEvent
+  getEvent,
   getAllEvents
 };

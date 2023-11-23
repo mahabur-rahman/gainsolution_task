@@ -11,6 +11,6 @@ router.delete('/:id', deleteEvent)
 // single event 
 router.get('/:id', getEvent)
 // get all events 
-router.get('/events', getAllEvents)
+router.get('/', getAllEvents)
 
 module.exports = router
