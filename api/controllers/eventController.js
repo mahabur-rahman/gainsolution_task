@@ -16,7 +16,7 @@ const createEvent = async (req, res) => {
 const updateEvent = async (req, res) => {
   try {
     const event = await Event.findById(req.params.id);
-    
+
     if (event.username === req.body.username) {
       try {
         const updatedEvent = await Event.findByIdAndUpdate(
@@ -39,7 +39,28 @@ const updateEvent = async (req, res) => {
   }
 };
 
+// delete Event
+const deleteEvent = async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+console.log(event)
+    if (event.username === req.body.username) {
+      try {
+        await Event.findByIdAndDelete(req.params.id);
+       return res.status(200).json("Event has been deleted!");
+      } catch (err) {
+        return res.status(500).json(err);
+      }
+    } else {
+      return res.status(401).json("You can delete only your Event!");
+    }
+  } catch (err) {
+   return res.status(500).json(err);
+  }
+};
+
 module.exports = {
   createEvent,
   updateEvent,
+  deleteEvent,
 };
