@@ -1,18 +1,20 @@
 import { useState } from "react";
 import { Card, Col, Badge, Container, Row } from "react-bootstrap";
 import { useEffect } from "react";
-import { useParams , Link, useNavigate} from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaTrashCan } from "react-icons/fa6";
 import { MdOutlineEdit } from "react-icons/md";
-import {useSelector} from 'react-redux'
+import { useSelector } from "react-redux";
 
 const SingleEvent = () => {
+  const { currentUser } = useSelector((state) => state.user);
+
   const [event, setEvent] = useState({});
   const { id } = useParams();
+  const [updateMode, setUpdateMode] = useState(false);
 
-  const {currentUser} = useSelector(state => state.user)
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getSingleEvent = async () => {
@@ -39,20 +41,17 @@ const SingleEvent = () => {
     photo,
   } = event;
 
-
-
-  // Delete event 
-   const handleDelete = async () => {
+  // Delete event
+  const handleDelete = async () => {
     try {
       await axios.delete(`http://localhost:4000/api/events/${event._id}`, {
-        data: { username: currentUser.username },
+        data: { username: currentUser?.username },
       });
       navigate("/");
     } catch (err) {
-      console.log(err.message)
+      console.log(err.message);
     }
   };
-  
 
   return (
     <>
@@ -74,27 +73,69 @@ const SingleEvent = () => {
                   <Link to={`/?user=${username}`}>{username}</Link>
                 </div>
                 {event?.username === currentUser?.username && (
-                <div>
-                  {/* actions */}
-                  <div className="text-danger mb-3">
-                    <span className="text-warning mx-3">
-                      <MdOutlineEdit style={{ fontSize: "1.5rem", cursor:'pointer' }} />
-                    </span>
-                    <span onClick={handleDelete}>
-                      <FaTrashCan style={{ fontSize: "1.2rem", cursor:'pointer'  }} />
-                    </span>
+                  <div>
+                    {/* actions */}
+                    <div className="text-danger mb-3">
+                      <span
+                        className="text-warning mx-3"
+                        onClick={() => setUpdateMode(true)}
+                      >
+                        <MdOutlineEdit
+                          style={{ fontSize: "1.5rem", cursor: "pointer" }}
+                        />
+                      </span>
+                      <span onClick={handleDelete}>
+                        <FaTrashCan
+                          style={{ fontSize: "1.2rem", cursor: "pointer" }}
+                        />
+                      </span>
+                    </div>
+                    {new Date(createdAt).toDateString()}
                   </div>
-                  {new Date(createdAt).toDateString()}
-                </div>
-
                 )}
               </div>
               <Card.Body>
-                <Card.Title>{title}</Card.Title>
-                <Card.Text>{description}</Card.Text>
-                <Card.Text>
-                  Location: <span className="text-success">{location}</span>
-                </Card.Text>
+                {updateMode ? (
+                  <>
+                    <label className="fw-semibold my-2">Title : </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={title}
+                      autoFocus
+                    />
+                  </>
+                ) : (
+                  <Card.Title>{title}</Card.Title>
+                )}
+
+                {updateMode ? (
+                  <>
+                   <label className="fw-semibold my-2">Description : </label>
+                   <textarea
+                     className="form-control"
+                     value={description}
+                     rows={3}
+                   />
+                  </>
+                ) : (
+                  <Card.Text>{description}</Card.Text>
+                )}
+
+                {updateMode ? (
+                  <>
+                    <label className="fw-semibold my-2">Location : </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={location}
+                    />
+                  </>
+                ) : (
+                  <Card.Text>
+                    Location: <span className="text-success">{location}</span>
+                  </Card.Text>
+                )}
               </Card.Body>
               <div className="text-end py-2">
                 <Badge pill bg="light" text="dark">
@@ -110,13 +151,25 @@ const SingleEvent = () => {
               </div>
               <div className="text-end text-bg-secondary cursor-pointer py-1">
                 {categories?.map((cat) => (
-                  <Link to={`/?cat=${cat}`} className="mx-1 text-white" key={cat._id}>
-                   {cat}
+                  <Link
+                    to={`/?cat=${cat}`}
+                    className="mx-1 text-white"
+                    key={cat._id}
+                  >
+                    {cat}
                   </Link>
                 ))}
               </div>
             </Card>
           </Col>
+
+          {updateMode && (
+            <div className="my-3">
+              <button className="bg-success text-white px-4 py-1 btn">
+                Update Event
+              </button>
+            </div>
+          )}
         </Row>
       </Container>
     </>
