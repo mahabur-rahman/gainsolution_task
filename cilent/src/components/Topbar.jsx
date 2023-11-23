@@ -2,10 +2,17 @@ import { Container, Navbar, Dropdown } from "react-bootstrap";
 import { FaUserAlt } from "react-icons/fa";
 import logo from "../images/mainLogo.webp";
 import { Link } from "react-router-dom";
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
+import { logout } from "../redux/userSlice";
 
 const Topbar = () => {
   const {currentUser} = useSelector(state => state.user)
+  const dispatch = useDispatch();
+
+  // logout 
+  const handleLogout = () =>{
+    dispatch(logout())
+  }
   return (
     <>
       <Navbar className="bg-body-tertiary">
@@ -49,7 +56,7 @@ const Topbar = () => {
 
                   <Dropdown.Menu>
                     <Dropdown.Item>
-                      <div className="logout_btn bg-transparent border-0 text-danger">Logout</div>
+                      <div className="logout_btn bg-transparent border-0 text-danger" onClick={handleLogout}>Logout</div>
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
