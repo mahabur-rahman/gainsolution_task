@@ -1,73 +1,25 @@
-import { Card, Container, Row, Col } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import {  Container, Row } from "react-bootstrap";
+import EventList from "../components/EventList";
+import axios from 'axios'
 
 const Events = () => {
+  const [events, setEvents] = useState([])
+
+  useEffect(() =>{
+    const fetchEvents = async() =>{
+      const res = await axios.get('http://localhost:4000/api/events')
+      console.log(res.data)
+      setEvents(res.data)
+    }
+    fetchEvents()
+  },[])
   return (
     <>
       <section className="my-5 py-5 w-full">
         <Container className="mx-auto">
           <Row>
-            <Col xl={4} lg={6} md={4} className="my-2">
-              <Card>
-                <Card.Img variant="top" src="holder.js/100px180" />
-                <Card.Body>
-                  <Card.Title>Card Title</Card.Title>
-                  <Card.Text>
-                    Some quick example text to build on the card title and make
-                    up the bulk of the content.
-                  </Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-
-            <Col xl={4} lg={6} md={4} className="my-2">
-              <Card>
-                <Card.Img variant="top" src="holder.js/100px180" />
-                <Card.Body>
-                  <Card.Title>Card Title</Card.Title>
-                  <Card.Text>
-                    Some quick example text to build on the card title and make
-                    up the bulk of the content.
-                  </Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-
-            <Col xl={4} lg={6} md={4} className="my-2">
-              <Card>
-                <Card.Img variant="top" src="holder.js/100px180" />
-                <Card.Body>
-                  <Card.Title>Card Title</Card.Title>
-                  <Card.Text>
-                    Some quick example text to build on the card title and make
-                    up the bulk of the content.
-                  </Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col xl={4} lg={6} md={4} className="my-2">
-              <Card>
-                <Card.Img variant="top" src="holder.js/100px180" />
-                <Card.Body>
-                  <Card.Title>Card Title</Card.Title>
-                  <Card.Text>
-                    Some quick example text to build on the card title and make
-                    up the bulk of the content.
-                  </Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col xl={4} lg={6} md={4} className="my-2">
-              <Card>
-                <Card.Img variant="top" src="holder.js/100px180" />
-                <Card.Body>
-                  <Card.Title>Card Title</Card.Title>
-                  <Card.Text>
-                    Some quick example text to build on the card title and make
-                    up the bulk of the content.
-                  </Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
+            <EventList events={events} />
           </Row>
         </Container>
       </section>
