@@ -12,7 +12,7 @@ import CreateEvent from "./pages/createEvent";
 import UpdateEvent from "./pages/updateEvent";
 import Footer from "./components/Footer";
 import NotFound from "./components/NotFound";
-import SingleEvent from "./pages/singleEvent";
+import SingleEvent from "./pages/SingleEvent";
 
 const App = () => {
   return (

@@ -9,14 +9,14 @@ const Events = () => {
   useEffect(() =>{
     const fetchEvents = async() =>{
       const res = await axios.get('http://localhost:4000/api/events')
-      console.log(res.data)
       setEvents(res.data)
     }
     fetchEvents()
   },[])
   return (
     <>
-      <section className="my-5 py-5 w-full">
+    <h2>Search here: </h2>
+      <section className="my-3 py-5 w-full">
         <Container className="mx-auto">
           <Row>
             <EventList events={events} />
