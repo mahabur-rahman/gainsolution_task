@@ -13,6 +13,7 @@ connectedDB();
 
 // ROUTE  
 const authRoute = require('./routes/auth.route')
+const userRoute = require('./routes/users.route')
 
 // middleware 
 app.use(cors())
@@ -20,6 +21,7 @@ app.use(express.json())
 
 
 app.use('/api/auth', authRoute)
+app.use('/api/users',userRoute)
 
 // listen 
 app.listen(PORT, () =>{
