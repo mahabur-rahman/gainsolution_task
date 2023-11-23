@@ -17,7 +17,7 @@ const Event = ({ event }) => {
               <Card.Text>
                 Location: <span className="text-success">{event.location}</span>
               </Card.Text>
-            </Card.Body>
+            </Card.Body>  
           </Link>
           <div className="text-end py-2">
             <Badge pill bg="light" text="dark">

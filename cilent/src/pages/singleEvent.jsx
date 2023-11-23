@@ -37,6 +37,7 @@ const SingleEvent = () => {
     createdAt,
     photo,
   } = event;
+  
 
   return (
     <>
@@ -57,7 +58,7 @@ const SingleEvent = () => {
                   <span className="mx-1">Author : </span>
                   <Link to={`/?user=${username}`}>{username}</Link>
                 </div>
-                {event.username === currentUser.username && (
+                {event?.username === currentUser?.username && (
                 <div>
                   {/* actions */}
                   <div className="text-danger mb-3">
