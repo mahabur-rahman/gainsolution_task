@@ -3,12 +3,13 @@ import { Card, Col, Badge } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const Event = ({ event }) => {
+  const PF = "http://localhost:4000/images/";
   return (
     <>
       <Col xl={4} lg={6} md={4} className="my-2" key={event._id}>
         <Card style={{ minHeight: "220px" }}>
           {event.photo && (
-            <img className="postImg" src={event.photo} alt={event.title} />
+            <img className="postImg" src={PF+ event.photo} alt={event.title} />
           )}
           <Link to={`/event/${event._id}`} style={{ color: "inherit" }}>
             <Card.Body>

@@ -1,42 +1,52 @@
 import { useState } from "react";
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 const CreateEvent = () => {
+  const { currentUser } = useSelector((state) => state.user);
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [location, setLocation] = useState("");
   const [file, setFile] = useState("");
+  
+  // http://localhost:4000/images/1700765584372profile_of_mahabur.jpeg
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // validation of input field
-    if (title === "") {
-      toast.warning("Event title is required", {
-        position: "top-center",
-      });
-    } else if (description === "") {
-      toast.error("Description is required", {
-        position: "top-center",
-      });
-    } else if (startDate === "") {
-      toast.warning("Choose start date", {
-        position: "top-center",
-      });
-    } else if (endDate === "") {
-      toast.error("Choose end date", {
-        position: "top-center",
-      });
-    } else if (location === "") {
-      toast.error("Write your actual location", {
-        position: "top-center",
-      });
-    } else {
-      // api call
-      console.log(title, description, startDate, endDate, file, location)
+    const newEvent = {
+      username: currentUser?.username,
+      title,
+      description,
+      startDate,
+      endDate,
+      location,
+      file,
+    };
+    if (file) {
+      const data = new FormData();
+      const filename = Date.now() + file.name;
+      data.append("name", filename);
+      data.append("file", file);
+      newEvent.photo = filename;
+      try {
+        await axios.post("http://localhost:4000/api/upload", data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    try {
+      const res = await axios.post(
+        "http://localhost:4000/api/events/create-event",
+        newEvent
+      );
+      console.log(res.data);
+      // window.location.replace("/post/" + res.data._id);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -103,17 +113,11 @@ const CreateEvent = () => {
               </Form.Group>
 
               <div className="gap-2">
-                <Button
-                  variant="secondary"
-                  type="submit"
-                >
+                <Button variant="secondary" type="submit">
                   Create Event
                 </Button>
               </div>
             </Form>
-
-            {/* react toastify */}
-            <ToastContainer />
           </Col>
         </Row>
       </Container>

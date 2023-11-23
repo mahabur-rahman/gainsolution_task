@@ -8,6 +8,7 @@ import { MdOutlineEdit } from "react-icons/md";
 import { useSelector } from "react-redux";
 
 const SingleEvent = () => {
+  
   const { currentUser } = useSelector((state) => state.user);
   const [event, setEvent] = useState({});
   const { id } = useParams();
@@ -16,6 +17,8 @@ const SingleEvent = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
+
+  const PF = "http://localhost:4000/images/";
 
   const navigate = useNavigate();
 
@@ -82,7 +85,7 @@ const SingleEvent = () => {
                 <img
                   style={{ maxHeight: "250px" }}
                   className="postImg object-fit-cover"
-                  src={photo}
+                  src={PF + photo}
                   alt={eventTitle}
                 />
               )}
