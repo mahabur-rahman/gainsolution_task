@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Card, Col, Badge, Container, Row } from "react-bootstrap";
 import { useEffect } from "react";
-import { useParams , Link} from "react-router-dom";
+import { useParams , Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 import { FaTrashCan } from "react-icons/fa6";
 import { MdOutlineEdit } from "react-icons/md";
@@ -12,6 +12,7 @@ const SingleEvent = () => {
   const { id } = useParams();
 
   const {currentUser} = useSelector(state => state.user)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const getSingleEvent = async () => {
@@ -37,6 +38,20 @@ const SingleEvent = () => {
     createdAt,
     photo,
   } = event;
+
+
+
+  // Delete event 
+   const handleDelete = async () => {
+    try {
+      await axios.delete(`http://localhost:4000/api/events/${event._id}`, {
+        data: { username: currentUser.username },
+      });
+      navigate("/");
+    } catch (err) {
+      console.log(err.message)
+    }
+  };
   
 
   return (
@@ -65,7 +80,7 @@ const SingleEvent = () => {
                     <span className="text-warning mx-3">
                       <MdOutlineEdit style={{ fontSize: "1.5rem", cursor:'pointer' }} />
                     </span>
-                    <span>
+                    <span onClick={handleDelete}>
                       <FaTrashCan style={{ fontSize: "1.2rem", cursor:'pointer'  }} />
                     </span>
                   </div>
