@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useDispatch, useSelector } from "react-redux";
-import {login} from '../redux/apiCalls'
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";
+import axios from "axios";
 
 const Login = () => {
   const [toggle, setToggle] = useState(false);
@@ -12,9 +11,8 @@ const Login = () => {
     email: "",
     password: "",
   });
-
   const dispatch = useDispatch();
-    const { user, isFetching, error } = useSelector((state) => state.user);
+  const navigate = useNavigate();
 
   // handleChange
   const handleChange = (e) => {
@@ -23,35 +21,25 @@ const Login = () => {
   };
 
   // loginUser
-  const loginUser = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-
-    if (userData.email === "") {
-      toast.error("Email is required!", {
-        position: "top-center",
+    dispatch(loginStart());
+    try {
+      const res = await axios.post("http://localhost:4000/api/auth/login", {
+        email: userData.email,
+        password: userData.password,
       });
-    } else if (!userData.email.includes("@")) {
-      toast.warning("Includes @ in your email", {
-        position: "top-center",
-      });
-    } else if (userData.password === "") {
-      toast.error("Password is required", {
-        position: "top-center",
-      });
-    } else {
-      const {email, password} = userData
-      // API CALL
-      login(dispatch, {email, password })
+      dispatch(loginSuccess(res.data));
+      navigate("/");
+    } catch (err) {
+      dispatch(loginFailure());
     }
   };
-
-
-  console.log(`main access user : `, user)
 
   return (
     <>
       <Container className="mb-5">
-      <h3 className="text-center mt-3">User Login</h3>
+        <h3 className="text-center mt-3">User Login</h3>
         <Row>
           <Col xl={6} lg={6} md={6} className="mx-auto mt-2 pt-2">
             <Form>
@@ -64,10 +52,7 @@ const Login = () => {
                   onChange={handleChange}
                 />
               </Form.Group>
-              <Form.Group
-                className="mb-3"
-                controlId="formGroupPassword"
-              >
+              <Form.Group className="mb-3" controlId="formGroupPassword">
                 <Form.Label className="fw-semibold">Password :</Form.Label>
                 <Form.Control
                   type={!toggle ? "password" : "text"}
@@ -81,11 +66,7 @@ const Login = () => {
               </Form.Group>
 
               <div className="d-grid gap-2">
-                <Button
-                  variant="secondary"
-                  type="submit"
-                  onClick={loginUser}
-                >
+                <Button variant="secondary" type="submit" onClick={handleLogin}>
                   Login
                 </Button>
               </div>
@@ -96,9 +77,6 @@ const Login = () => {
                 </Link>
               </p>
             </Form>
-
-            {/* react toastify */}
-            <ToastContainer />
           </Col>
         </Row>
       </Container>

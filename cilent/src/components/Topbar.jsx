@@ -2,9 +2,10 @@ import { Container, Navbar, Dropdown } from "react-bootstrap";
 import { FaUserAlt } from "react-icons/fa";
 import logo from "../images/mainLogo.webp";
 import { Link } from "react-router-dom";
+import {useSelector} from 'react-redux'
 
 const Topbar = () => {
-  const user = false;
+  const {currentUser} = useSelector(state => state.user)
   return (
     <>
       <Navbar className="bg-body-tertiary">
@@ -30,7 +31,7 @@ const Topbar = () => {
               </Link>
             </Navbar.Text>
 
-            {user && (
+            {currentUser && (
               <Navbar.Text>
                 <Link to={`/create-event`} >
                   Create Event
@@ -38,12 +39,12 @@ const Topbar = () => {
               </Navbar.Text>
             )}
 
-            {user && (
+            {currentUser && (
               <Navbar.Text className="mx-3">
                 <Dropdown>
                   <Dropdown.Toggle variant="light">
                     <FaUserAlt />
-                    <span className="mx-2 text-capitalize"> mahabur </span>
+                    <span className="mx-2 text-capitalize"> {currentUser.username} </span>
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu>
