@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { FaTrashCan } from "react-icons/fa6";
 import { MdOutlineEdit } from "react-icons/md";
+import {Link} from 'react-router-dom'
 
 const SingleEvent = () => {
   const [event, setEvent] = useState({});
@@ -50,7 +51,10 @@ const SingleEvent = () => {
                 />
               )}
               <div className="d-flex align-items-center justify-content-between p-3 text-info">
-                <div>Author: {username}</div>
+                <div>
+                  <span className="mx-1">Author : </span>
+                  <Link to={`/?user=${username}`}>{username}</Link>
+                </div>
                 <div>
                   {/* actions */}
                   <div className="text-danger mb-3">
@@ -85,9 +89,9 @@ const SingleEvent = () => {
               </div>
               <div className="text-end text-bg-secondary cursor-pointer py-1">
                 {categories?.map((cat) => (
-                  <span className="mx-1" key={cat._id}>
-                    Event category : {cat}
-                  </span>
+                  <Link to={`/?cat=${cat}`} className="mx-1 text-white" key={cat._id}>
+                   {cat}
+                  </Link>
                 ))}
               </div>
             </Card>

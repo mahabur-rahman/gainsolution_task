@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from 'axios'
+
 
 const Register = () => {
   const [userInfo, setUserInfo] = useState({
@@ -12,6 +14,8 @@ const Register = () => {
   });
   // password show/hide state
   const [toggle, setToggle] = useState(false);
+
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,7 +43,18 @@ const Register = () => {
       });
     } else {
       // api call
-      console.log(userInfo)
+      const {username, email, password} = userInfo
+      try {
+        const res = await axios.post("http://localhost:4000/api/auth/register", {
+          username,
+          email,
+          password,
+        });
+       
+        res.data && navigate(`/login`)
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
