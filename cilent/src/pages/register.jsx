@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
   const [userInfo, setUserInfo] = useState({
-    name: "",
+    username: "",
     email: "",
     password: "",
   });
@@ -21,7 +21,7 @@ const Register = () => {
   const registerUser = async (e) => {
     e.preventDefault();
     // validation of input field
-    if (userInfo.name === "") {
+    if (userInfo.username === "") {
       toast.warning("Name is required", {
         position: "top-center",
       });
@@ -53,9 +53,9 @@ const Register = () => {
               <Form.Group className="mb-3" controlId="formGroupEmail">
                 <Form.Label className="fw-semibold">Name :</Form.Label>
                 <Form.Control
-                  type="email"
+                  type="text"
                   placeholder="Enter your name"
-                  name="name"
+                  name="username"
                   onChange={handleChange}
                 />
               </Form.Group>

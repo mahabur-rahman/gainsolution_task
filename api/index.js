@@ -6,6 +6,9 @@ const dotenv = require('dotenv')
 // env config 
 dotenv.config()
 const PORT = process.env.PORT || 5000
+// connect with mongodb atlas
+const connectedDB = require("./db/connect");
+connectedDB();
 
 // ROUTE  
 
