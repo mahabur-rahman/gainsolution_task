@@ -9,10 +9,13 @@ import { useSelector } from "react-redux";
 
 const SingleEvent = () => {
   const { currentUser } = useSelector((state) => state.user);
-
   const [event, setEvent] = useState({});
   const { id } = useParams();
+
   const [updateMode, setUpdateMode] = useState(false);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [location, setLocation] = useState("");
 
   const navigate = useNavigate();
 
@@ -30,16 +33,32 @@ const SingleEvent = () => {
   }, [id]);
 
   const {
-    title,
-    description,
+    title: eventTitle,
+    description: eventDescription,
     startDate,
     endDate,
     username,
-    location,
+    location: eventLocation,
     categories,
     createdAt,
     photo,
   } = event;
+
+// update event api call
+  const updateEvent = async () => {
+    try {
+      await axios.put(`http://localhost:4000/api/events/${event._id}`, {
+        username: currentUser.username,
+        title,
+        description,
+        location
+      });
+      setUpdateMode(false)
+        navigate("/");
+    } catch (err) {
+      console.log(err.message)
+    }
+  };
 
   // Delete event
   const handleDelete = async () => {
@@ -53,6 +72,8 @@ const SingleEvent = () => {
     }
   };
 
+
+
   return (
     <>
       <Container>
@@ -64,7 +85,7 @@ const SingleEvent = () => {
                   style={{ maxHeight: "250px" }}
                   className="postImg object-fit-cover"
                   src={photo}
-                  alt={title}
+                  alt={eventTitle}
                 />
               )}
               <div className="d-flex align-items-center justify-content-between p-3 text-info">
@@ -103,23 +124,25 @@ const SingleEvent = () => {
                       className="form-control"
                       value={title}
                       autoFocus
+                      onChange={(e) => setTitle(e.target.value)}
                     />
                   </>
                 ) : (
-                  <Card.Title>{title}</Card.Title>
+                  <Card.Title>{eventTitle}</Card.Title>
                 )}
 
                 {updateMode ? (
                   <>
-                   <label className="fw-semibold my-2">Description : </label>
-                   <textarea
-                     className="form-control"
-                     value={description}
-                     rows={3}
-                   />
+                    <label className="fw-semibold my-2">Description : </label>
+                    <textarea
+                      className="form-control"
+                      value={description}
+                      rows={3}
+                      onChange={(e) => setDescription(e.target.value)}
+                    />
                   </>
                 ) : (
-                  <Card.Text>{description}</Card.Text>
+                  <Card.Text>{eventDescription}</Card.Text>
                 )}
 
                 {updateMode ? (
@@ -129,11 +152,13 @@ const SingleEvent = () => {
                       type="text"
                       className="form-control"
                       value={location}
+                      onChange={(e) => setLocation(e.target.value)}
                     />
                   </>
                 ) : (
                   <Card.Text>
-                    Location: <span className="text-success">{location}</span>
+                    Location:{" "}
+                    <span className="text-success">{eventLocation}</span>
                   </Card.Text>
                 )}
               </Card.Body>
@@ -165,7 +190,7 @@ const SingleEvent = () => {
 
           {updateMode && (
             <div className="my-3">
-              <button className="bg-success text-white px-4 py-1 btn">
+              <button className="bg-success text-white px-4 py-1 btn" onClick={updateEvent}>
                 Update Event
               </button>
             </div>
