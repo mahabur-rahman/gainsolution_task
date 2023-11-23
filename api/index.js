@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const colors = require('colors')
+const cors = require("cors");
 const dotenv = require('dotenv')
 
 // env config 
@@ -11,10 +12,14 @@ const connectedDB = require("./db/connect");
 connectedDB();
 
 // ROUTE  
-
+const authRoute = require('./routes/auth.route')
 
 // middleware 
+app.use(cors())
+app.use(express.json())
 
+
+app.use('/api/auth', authRoute)
 
 // listen 
 app.listen(PORT, () =>{
