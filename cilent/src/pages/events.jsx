@@ -8,13 +8,15 @@ const Events = () => {
   const [events, setEvents] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5); // Change this value as needed
   const { search } = useLocation();
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:4000/api/events" + search
+          `http://localhost:4000/api/events${search}`
         );
         setEvents(res.data);
       } catch (error) {
@@ -26,6 +28,7 @@ const Events = () => {
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
+    setCurrentPage(1);
   };
 
   const handleClearDate = () => {
@@ -52,6 +55,16 @@ const Events = () => {
       })
     : filteredEventsByQuery;
 
+  // Pagination logic
+  const indexOfLastEvent = currentPage * itemsPerPage;
+  const indexOfFirstEvent = indexOfLastEvent - itemsPerPage;
+  const currentEvents = filteredEventsByDate.slice(
+    indexOfFirstEvent,
+    indexOfLastEvent
+  );
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <>
       <Container>
@@ -63,7 +76,7 @@ const Events = () => {
             <input
               type="text"
               placeholder="Title or description or location..."
-              style={{width: '300px'}}
+              style={{ width: "300px" }}
               className="form-control"
               value={searchQuery}
               onChange={handleSearchChange}
@@ -97,9 +110,32 @@ const Events = () => {
       <section className="my-3 py-5 w-full">
         <Container className="mx-auto">
           <Row>
-            <EventList events={filteredEventsByDate} />
+            <EventList events={currentEvents} />
           </Row>
         </Container>
+        {/* Pagination UI */}
+        <div className="d-flex justify-content-center mt-4">
+          <ul className="pagination">
+            {Array.from(
+              { length: Math.ceil(filteredEventsByDate.length / itemsPerPage) },
+              (_, index) => (
+                <li
+                  key={index}
+                  className={`page-item ${
+                    currentPage === index + 1 ? "active" : ""
+                  }`}
+                >
+                  <button
+                    onClick={() => paginate(index + 1)}
+                    className="page-link"
+                  >
+                    {index + 1}
+                  </button>
+                </li>
+              )
+            )}
+          </ul>
+        </div>
       </section>
     </>
   );
