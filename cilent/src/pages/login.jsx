@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container, Form, Row, Col, Button } from "react-bootstrap";
+import { Container, Form, Row, Col, Button, Alert } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";
@@ -11,29 +11,39 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const [validated, setValidated] = useState(false);
+  const [error, setError] = useState(null);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // handleChange
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
   };
 
-  // loginUser
   const handleLogin = async (e) => {
     e.preventDefault();
-    dispatch(loginStart());
-    try {
-      const res = await axios.post("http://localhost:4000/api/auth/login", {
-        email: userData.email,
-        password: userData.password,
-      });
-      dispatch(loginSuccess(res.data));
-      navigate("/");
-    } catch (err) {
-      dispatch(loginFailure());
+    const form = e.currentTarget;
+
+    if (form.checkValidity() === false) {
+      e.stopPropagation();
+    } else {
+      dispatch(loginStart());
+      try {
+        const res = await axios.post("http://localhost:4000/api/auth/login", {
+          email: userData.email,
+          password: userData.password,
+        });
+        dispatch(loginSuccess(res.data));
+        navigate("/");
+      } catch (err) {
+        dispatch(loginFailure());
+        setError("");
+      }
     }
+
+    setValidated(true);
   };
 
   return (
@@ -42,15 +52,20 @@ const Login = () => {
         <h3 className="text-center mt-3">User Login</h3>
         <Row>
           <Col xl={6} lg={6} md={6} className="mx-auto mt-2 pt-2">
-            <Form>
+            <Form noValidate validated={validated}>
               <Form.Group className="mb-3" controlId="formGroupEmail">
                 <Form.Label className="fw-semibold">Email address :</Form.Label>
                 <Form.Control
                   type="email"
                   placeholder="Enter email"
                   name="email"
+                  value={userData.email}
                   onChange={handleChange}
+                  required
                 />
+                <Form.Control.Feedback type="invalid">
+                  Please provide a valid email.
+                </Form.Control.Feedback>
               </Form.Group>
               <Form.Group className="mb-3" controlId="formGroupPassword">
                 <Form.Label className="fw-semibold">Password :</Form.Label>
@@ -58,12 +73,19 @@ const Login = () => {
                   type={!toggle ? "password" : "text"}
                   placeholder="******"
                   name="password"
+                  value={userData.password}
                   onChange={handleChange}
+                  required
                 />
+                <Form.Control.Feedback type="invalid">
+                  Please provide a password.
+                </Form.Control.Feedback>
                 <div className="text-end" onClick={() => setToggle(!toggle)}>
                   {!toggle ? "Show" : "Hide"}
                 </div>
               </Form.Group>
+
+              {error && <Alert variant="danger">{error}</Alert>}
 
               <div className="d-grid gap-2">
                 <Button variant="secondary" type="submit" onClick={handleLogin}>

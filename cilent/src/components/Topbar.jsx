@@ -1,6 +1,6 @@
 import { Container, Navbar, Dropdown } from "react-bootstrap";
 import logo from "../images/mainLogo.webp";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/userSlice";
 
@@ -8,9 +8,12 @@ const Topbar = () => {
   const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
+  const navigate = useNavigate()
+
   // logout
   const handleLogout = () => {
     dispatch(logout());
+    navigate('/login')
   };
   return (
     <>

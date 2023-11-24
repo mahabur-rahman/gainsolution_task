@@ -10,6 +10,8 @@ import { useSelector } from "react-redux";
 const SingleEvent = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [event, setEvent] = useState({});
+  const [categoryList, setCategoryList] = useState([]);
+
   const { id } = useParams();
 
   const [updateMode, setUpdateMode] = useState(false);
@@ -33,6 +35,19 @@ const SingleEvent = () => {
 
     getSingleEvent();
   }, [id]);
+
+  // all category fetch
+  useEffect(() => {
+    const fetchCat = async () => {
+      try {
+        const res = await axios.get(`http://localhost:4000/api/categories`);
+        setCategoryList(res?.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    fetchCat();
+  }, []);
 
   const {
     title: eventTitle,
@@ -78,7 +93,7 @@ const SingleEvent = () => {
     <>
       <Container>
         <Row>
-          <Col xl={12} lg={10} md={7} className="my-2 mx-auto">
+          <Col xl={8} lg={10} md={7} className="my-2 mx-auto">
             <Card>
               {photo && (
                 <img
@@ -198,6 +213,22 @@ const SingleEvent = () => {
               </button>
             </div>
           )}
+
+          {/*  categories list */}
+          <Col xl={4} className="my-2 mx-auto">
+            <Card>
+              <div className="d-flex align-items-center justify-content-between p-3 text-info">
+                <div>
+                  <span className="mx-1">Event Categories : </span>
+                </div>
+              </div>
+              <Card.Body>
+                {categoryList?.map((cat) => (
+                  <Link  to={`/?cat=${cat.name}`} key={cat._id} className="mx-2">{cat.name}</Link>
+                ))}
+              </Card.Body>
+            </Card>
+          </Col>
         </Row>
       </Container>
     </>

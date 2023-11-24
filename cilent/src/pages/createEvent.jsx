@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const CreateEvent = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -13,7 +14,7 @@ const CreateEvent = () => {
   const [location, setLocation] = useState("");
   const [file, setFile] = useState("");
   
-  // http://localhost:4000/images/1700765584372profile_of_mahabur.jpeg
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,8 +44,8 @@ const CreateEvent = () => {
         "http://localhost:4000/api/events/create-event",
         newEvent
       );
-      console.log(res.data);
-      // window.location.replace("/post/" + res.data._id);
+      res.data && navigate('/')
+     
     } catch (err) {
       console.log(err);
     }

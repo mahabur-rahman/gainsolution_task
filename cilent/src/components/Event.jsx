@@ -15,7 +15,7 @@ const Event = ({ event }) => {
         setCopied(true);
         setTimeout(() => {
           setCopied(false);
-        }, 3000);
+        }, 3000); 
       })
       .catch((err) => {
         console.error("Failed to copy: ", err);
@@ -35,7 +35,7 @@ const Event = ({ event }) => {
 
   return (
     <>
-      <Col lg={5} md={4} className="my-2" key={event._id}>
+      <Col xl={4} lg={6} md={4} className="my-2" key={event._id}>
         <Card style={{ minHeight: "220px" }}>
           {event.photo && (
             <img
