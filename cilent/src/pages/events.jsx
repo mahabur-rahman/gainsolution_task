@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row } from "react-bootstrap";
 import EventList from "../components/EventList";
 import axios from "axios";
 import { useLocation } from "react-router";
@@ -49,20 +49,21 @@ const Events = () => {
   return (
     <>
       <Container>
-        <Row>
-          <Col xl={5} md={5} lg={5} sm={5} className="me-auto mt-3">
+        <div className="d-flex align-items-center justify-content-between">
+          <div className="me-auto mt-3">
             <label htmlFor="search" className="fw-semibold mb-2">
               Search Event:
             </label>
             <input
+          style={{width: '320px'}}
               type="text"
               placeholder="Title or description or location..."
               className="form-control"
               value={searchQuery}
               onChange={handleSearchChange}
             />
-          </Col>
-          <Col xl={5} md={5} lg={5} sm={5} className="me-auto mt-3">
+          </div>
+          <div className="mt-3">
             <label htmlFor="search" className="fw-semibold mb-2">
               Search Event By Date:
             </label>
@@ -74,8 +75,8 @@ const Events = () => {
               value={selectedDate}
               onChange={e => setSelectedDate(e.target.value)}
             />
-          </Col>
-        </Row>
+          </div>
+        </div>
       </Container>
       <section className="my-3 py-5 w-full">
         <Container className="mx-auto">
