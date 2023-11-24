@@ -1,18 +1,21 @@
 import { useState } from "react";
 import { Container, Form, Row, Col, Button, Alert } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";
 import axios from "axios";
 
 const Login = () => {
+  const { error } = useSelector((state) => state.user);
+
   const [toggle, setToggle] = useState(false);
   const [userData, setUserData] = useState({
     email: "",
     password: "",
   });
+  
   const [validated, setValidated] = useState(false);
-  const [error, setError] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -35,16 +38,21 @@ const Login = () => {
           email: userData.email,
           password: userData.password,
         });
+
         dispatch(loginSuccess(res.data));
-        navigate("/");
+
+        res.data && navigate("/");
       } catch (err) {
         dispatch(loginFailure());
-        setError("");
+        setErrorMsg("");
       }
     }
 
     setValidated(true);
   };
+
+
+  
 
   return (
     <>
@@ -85,13 +93,19 @@ const Login = () => {
                 </div>
               </Form.Group>
 
-              {error && <Alert variant="danger">{error}</Alert>}
+              {errorMsg && <Alert variant="danger">{errorMsg}</Alert>}
 
               <div className="d-grid gap-2">
                 <Button variant="secondary" type="submit" onClick={handleLogin}>
                   Login
                 </Button>
               </div>
+
+              {/* error text here */}
+              {error && (
+                <div className="text-danger text-end">Invalid Credentials!</div>
+              )}
+
               <p className="text-center my-1">
                 Do not have an account? Please
                 <Link to={`/register`} className="mx-1">
