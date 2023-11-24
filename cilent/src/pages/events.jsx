@@ -6,43 +6,81 @@ import { useLocation } from "react-router";
 
 const Events = () => {
   const [events, setEvents] = useState([]);
-   const [searchQuery, setSearchQuery] = useState(''); // State for search query
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedDate, setSelectedDate] = useState('');
   const { search } = useLocation();
 
   useEffect(() => {
     const fetchEvents = async () => {
-      const res = await axios.get("http://localhost:4000/api/events" + search);
-      setEvents(res.data);
+      try {
+        const res = await axios.get("http://localhost:4000/api/events" + search);
+        setEvents(res.data);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
     };
     fetchEvents();
   }, [search]);
 
-   // Function to handle search input change
-   const handleSearchChange = (e) => {
+  const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
 
-   // Filter events based on title or description matching the search query
-  const filteredEvents = events.filter(event =>
-    event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    event.description.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredEventsByQuery = events.filter(
+    (event) =>
+      event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      event.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      event.location.toLowerCase().includes(searchQuery.toLowerCase()) 
   );
+
+  const filteredEventsByDate = selectedDate
+    ? filteredEventsByQuery.filter(event => {
+        const eventStartDate = new Date(event.startDate); 
+        const eventEndDate = new Date(event.endDate); 
+        const selectedDateFormat = new Date(selectedDate);
+
+        return (
+          selectedDateFormat >= eventStartDate && 
+          selectedDateFormat <= eventEndDate
+        );
+      })
+    : filteredEventsByQuery;
 
   return (
     <>
       <Container>
         <Row>
           <Col xl={5} md={5} lg={5} sm={5} className="me-auto mt-3">
-            <label htmlFor="search" className="fw-semibold mb-2">Search Event : </label>
-            <input type="text" placeholder="Search.." className="form-control" value={searchQuery}
-              onChange={handleSearchChange} />
+            <label htmlFor="search" className="fw-semibold mb-2">
+              Search Event:
+            </label>
+            <input
+              type="text"
+              placeholder="Title or description or location..."
+              className="form-control"
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
+          </Col>
+          <Col xl={5} md={5} lg={5} sm={5} className="me-auto mt-3">
+            <label htmlFor="search" className="fw-semibold mb-2">
+              Search Event By Date:
+            </label>
+            <input
+              type="date"
+              placeholder="Search.."
+              className="form-control"
+              style={{ width: '200px' }}
+              value={selectedDate}
+              onChange={e => setSelectedDate(e.target.value)}
+            />
           </Col>
         </Row>
       </Container>
       <section className="my-3 py-5 w-full">
         <Container className="mx-auto">
           <Row>
-            <EventList events={filteredEvents} />
+            <EventList events={filteredEventsByDate} />
           </Row>
         </Container>
       </section>
