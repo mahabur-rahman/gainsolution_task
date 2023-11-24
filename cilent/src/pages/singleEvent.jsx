@@ -201,8 +201,6 @@ const SingleEvent = () => {
                 ))}
               </div>
             </Card>
-          </Col>
-
           {updateMode && (
             <div className="my-3">
               <button
@@ -213,6 +211,8 @@ const SingleEvent = () => {
               </button>
             </div>
           )}
+          </Col>
+
 
           {/*  categories list */}
           <Col xl={4} className="my-2 mx-auto">

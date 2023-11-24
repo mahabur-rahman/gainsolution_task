@@ -9,7 +9,7 @@ const Events = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5); // Change this value as needed
+  const [itemsPerPage] = useState(5); 
   const { search } = useLocation();
 
   useEffect(() => {
@@ -55,7 +55,7 @@ const Events = () => {
       })
     : filteredEventsByQuery;
 
-  // Pagination logic
+  // Pagination
   const indexOfLastEvent = currentPage * itemsPerPage;
   const indexOfFirstEvent = indexOfLastEvent - itemsPerPage;
   const currentEvents = filteredEventsByDate.slice(
@@ -84,7 +84,7 @@ const Events = () => {
           </div>
           <div className="mt-3">
             <label htmlFor="search" className="fw-semibold mb-2">
-              Search Event By Date:
+              Calender View :
             </label>
             <div className="d-flex align-items-center">
               <input
