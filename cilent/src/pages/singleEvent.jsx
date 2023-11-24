@@ -28,6 +28,10 @@ const SingleEvent = () => {
       try {
         const res = await axios.get(`http://localhost:4000/api/events/${id}`);
         setEvent(res.data);
+           // Setting initial values for update mode
+        setTitle(res.data.title || "");
+        setDescription(res.data.description || "");
+        setLocation(res.data.location || "");
       } catch (err) {
         console.log(err.message);
       }
