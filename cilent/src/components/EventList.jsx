@@ -1,12 +1,12 @@
 /* eslint-disable react/prop-types */
 import Event from "./Event";
 
-const EventList = ({ events }) => {
+const EventList = ({ events  }) => {
   return (
     <>
       {events?.map((event) => (
         <>
-          <Event event={event} />
+          <Event key={event._id} event={event} />
         </>
       ))}
     </>
