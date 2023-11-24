@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Container, Row } from "react-bootstrap";
 import EventList from "../components/EventList";
 import axios from "axios";
 import { useLocation } from "react-router";
@@ -7,13 +7,15 @@ import { useLocation } from "react-router";
 const Events = () => {
   const [events, setEvents] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedDate, setSelectedDate] = useState("");
   const { search } = useLocation();
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await axios.get("http://localhost:4000/api/events" + search);
+        const res = await axios.get(
+          "http://localhost:4000/api/events" + search
+        );
         setEvents(res.data);
       } catch (error) {
         console.error("Error fetching events:", error);
@@ -27,24 +29,24 @@ const Events = () => {
   };
 
   const handleClearDate = () => {
-    setSelectedDate(''); // Reset selected date to default value
+    setSelectedDate("");
   };
 
   const filteredEventsByQuery = events.filter(
     (event) =>
       event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       event.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      event.location.toLowerCase().includes(searchQuery.toLowerCase()) 
+      event.location.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const filteredEventsByDate = selectedDate
-    ? filteredEventsByQuery.filter(event => {
-        const eventStartDate = new Date(event.startDate); 
-        const eventEndDate = new Date(event.endDate); 
+    ? filteredEventsByQuery.filter((event) => {
+        const eventStartDate = new Date(event.startDate);
+        const eventEndDate = new Date(event.endDate);
         const selectedDateFormat = new Date(selectedDate);
 
         return (
-          selectedDateFormat >= eventStartDate && 
+          selectedDateFormat >= eventStartDate &&
           selectedDateFormat <= eventEndDate
         );
       })
@@ -53,20 +55,21 @@ const Events = () => {
   return (
     <>
       <Container>
-        <Row>
-          <Col xl={5} md={5} lg={5} sm={5} className="me-auto mt-3">
+        <div className="d-flex align-items-center justify-content-between">
+          <div className="mt-3">
             <label htmlFor="search" className="fw-semibold mb-2">
               Search Event:
             </label>
             <input
               type="text"
               placeholder="Title or description or location..."
+              style={{width: '300px'}}
               className="form-control"
               value={searchQuery}
               onChange={handleSearchChange}
             />
-          </Col>
-          <Col xl={5} md={5} lg={5} sm={5} className="me-auto mt-3">
+          </div>
+          <div className="mt-3">
             <label htmlFor="search" className="fw-semibold mb-2">
               Search Event By Date:
             </label>
@@ -75,9 +78,9 @@ const Events = () => {
                 type="date"
                 placeholder="Search.."
                 className="form-control me-2"
-                style={{ width: '200px' }}
+                style={{ width: "200px" }}
                 value={selectedDate}
-                onChange={e => setSelectedDate(e.target.value)}
+                onChange={(e) => setSelectedDate(e.target.value)}
               />
               {selectedDate && (
                 <button
@@ -88,8 +91,8 @@ const Events = () => {
                 </button>
               )}
             </div>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </Container>
       <section className="my-3 py-5 w-full">
         <Container className="mx-auto">
