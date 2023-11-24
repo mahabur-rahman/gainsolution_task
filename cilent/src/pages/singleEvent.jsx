@@ -8,7 +8,6 @@ import { MdOutlineEdit } from "react-icons/md";
 import { useSelector } from "react-redux";
 
 const SingleEvent = () => {
-  
   const { currentUser } = useSelector((state) => state.user);
   const [event, setEvent] = useState({});
   const { id } = useParams();
