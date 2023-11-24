@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Container, Row } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Container, Row, Col } from "react-bootstrap";
 import EventList from "../components/EventList";
 import axios from "axios";
 import { useLocation } from "react-router";
@@ -26,6 +26,10 @@ const Events = () => {
     setSearchQuery(e.target.value);
   };
 
+  const handleClearDate = () => {
+    setSelectedDate(''); // Reset selected date to default value
+  };
+
   const filteredEventsByQuery = events.filter(
     (event) =>
       event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -49,34 +53,43 @@ const Events = () => {
   return (
     <>
       <Container>
-        <div className="d-flex align-items-center justify-content-between">
-          <div className="me-auto mt-3">
+        <Row>
+          <Col xl={5} md={5} lg={5} sm={5} className="me-auto mt-3">
             <label htmlFor="search" className="fw-semibold mb-2">
               Search Event:
             </label>
             <input
-          style={{width: '320px'}}
               type="text"
               placeholder="Title or description or location..."
               className="form-control"
               value={searchQuery}
               onChange={handleSearchChange}
             />
-          </div>
-          <div className="mt-3">
+          </Col>
+          <Col xl={5} md={5} lg={5} sm={5} className="me-auto mt-3">
             <label htmlFor="search" className="fw-semibold mb-2">
               Search Event By Date:
             </label>
-            <input
-              type="date"
-              placeholder="Search.."
-              className="form-control"
-              style={{ width: '200px' }}
-              value={selectedDate}
-              onChange={e => setSelectedDate(e.target.value)}
-            />
-          </div>
-        </div>
+            <div className="d-flex align-items-center">
+              <input
+                type="date"
+                placeholder="Search.."
+                className="form-control me-2"
+                style={{ width: '200px' }}
+                value={selectedDate}
+                onChange={e => setSelectedDate(e.target.value)}
+              />
+              {selectedDate && (
+                <button
+                  className="btn btn-link text-danger"
+                  onClick={handleClearDate}
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+          </Col>
+        </Row>
       </Container>
       <section className="my-3 py-5 w-full">
         <Container className="mx-auto">
