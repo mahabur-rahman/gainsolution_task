@@ -35,10 +35,18 @@ const Event = ({ event }) => {
     }
   };
 
+  const getDescription = () => {
+    const words = event.description.split(' ');
+    if (words.length > 15) {
+      return words.slice(0, 15).join(' ') + '...';
+    }
+    return event.description;
+  };
+
   return (
     <>
       <Col xl={4} lg={6} md={4} className="my-2" key={event._id}>
-        <Card style={{ minHeight: "220px" }}>
+        <Card style={{ height: "500px" }}>
           {event.photo && (
             <img
               width="100%"
@@ -51,7 +59,7 @@ const Event = ({ event }) => {
           <Link to={`/event/${event._id}`} style={{ color: "inherit" }}>
             <Card.Body>
               <Card.Title>{event.title}</Card.Title>
-              <Card.Text>{event.description}</Card.Text>
+              <Card.Text>{getDescription(event.description)}</Card.Text>
               <Card.Text>
                 Location: <span className="text-success">{event.location}</span>
               </Card.Text>
