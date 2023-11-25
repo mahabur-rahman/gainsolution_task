@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { Container, Row } from "react-bootstrap";
+import { Container, Row, Offcanvas, Button } from "react-bootstrap";
 import EventList from "../components/EventList";
 import axios from "axios";
 import { useLocation } from "react-router";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-
 
 const Events = () => {
   const [events, setEvents] = useState([]);
@@ -14,6 +13,7 @@ const Events = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(6);
   const [calendarDate, setCalendarDate] = useState(new Date());
+  const [showCalendar, setShowCalendar] = useState(false);
 
   const { search } = useLocation();
 
@@ -69,7 +69,6 @@ const Events = () => {
       })
     : filteredEventsByQuery;
 
-  // Pagination
   const indexOfLastEvent = currentPage * itemsPerPage;
   const indexOfFirstEvent = indexOfLastEvent - itemsPerPage;
   const currentEvents = filteredEventsByDate.slice(
@@ -98,41 +97,48 @@ const Events = () => {
           </div>
           <div className="mt-3">
             <label htmlFor="search" className="fw-semibold mb-2">
-              Calender View :
+              Calendar View :
             </label>
             <div className="d-flex align-items-center">
-              {/* <input
-                type="date"
-                placeholder="Search.."
-                className="form-control me-2"
-                style={{ width: "200px" }}
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-              /> */}
-               <Calendar
-                onChange={handleCalendarChange}
-                value={calendarDate}
-                className="me-2"
-              />
-              {selectedDate && (
-                <button
-                  className="btn btn-link text-danger"
-                  onClick={handleClearDate}
-                >
-                  Clear
-                </button>
-              )}
+              <Button onClick={() => setShowCalendar(true)}>
+                Show Calendar
+              </Button>
             </div>
           </div>
         </div>
       </Container>
+
+      <Offcanvas
+        show={showCalendar}
+        onHide={() => setShowCalendar(false)}
+        placement="end"
+      >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>Calendar View</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          <Calendar
+            onChange={handleCalendarChange}
+            value={calendarDate}
+            className="me-2"
+          />
+          {selectedDate && (
+            <button
+              className="btn btn-link text-danger"
+              onClick={handleClearDate}
+            >
+              Clear
+            </button>
+          )}
+        </Offcanvas.Body>
+      </Offcanvas>
+
       <section className="w-full">
         <Container className="mx-auto">
           <Row>
             <EventList events={currentEvents} />
           </Row>
         </Container>
-        {/* Pagination UI */}
         <div className="d-flex justify-content-center mt-4">
           <ul className="pagination">
             {Array.from(
