@@ -10,12 +10,13 @@ const Event = ({ event }) => {
   const eventUrl = `http://localhost:5173/event/${event._id}`;
 
   const copyLinkToClipboard = () => {
-    navigator.clipboard.writeText(eventUrl)
+    navigator.clipboard
+      .writeText(eventUrl)
       .then(() => {
         setCopied(true);
         setTimeout(() => {
           setCopied(false);
-        }, 3000); 
+        }, 3000);
       })
       .catch((err) => {
         console.error("Failed to copy: ", err);
@@ -24,10 +25,11 @@ const Event = ({ event }) => {
 
   const shareCopiedLink = () => {
     if (navigator.share) {
-      navigator.share({
-        title: "Check out this event!",
-        url: eventUrl,
-      })
+      navigator
+        .share({
+          title: "Check out this event!",
+          url: eventUrl,
+        })
         .then(() => console.log("Successful share"))
         .catch((error) => console.log("Error sharing:", error));
     }
@@ -69,9 +71,25 @@ const Event = ({ event }) => {
             >
               {copied ? "Link Copied!" : "Copy & Share Link"}
             </Badge>
-            <FacebookIcon  style={{cursor: 'pointer'}} size={32} round onClick={shareCopiedLink} />
-            <TwitterIcon style={{cursor: 'pointer'}} className="mx-2" size={32} round onClick={shareCopiedLink} />
-            <WhatsappIcon   style={{cursor: 'pointer'}} size={32} round onClick={shareCopiedLink} />
+            <FacebookIcon
+              style={{ cursor: "pointer" }}
+              size={32}
+              round
+              onClick={shareCopiedLink}
+            />
+            <TwitterIcon
+              style={{ cursor: "pointer" }}
+              className="mx-2"
+              size={32}
+              round
+              onClick={shareCopiedLink}
+            />
+            <WhatsappIcon
+              style={{ cursor: "pointer" }}
+              size={32}
+              round
+              onClick={shareCopiedLink}
+            />
           </div>
           <div className="text-end text-bg-secondary cursor-pointer py-1">
             {event?.categories?.map((cat) => (

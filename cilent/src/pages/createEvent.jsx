@@ -18,6 +18,12 @@ const CreateEvent = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+      // Validation
+  if (!title || !description || !startDate || !endDate || !location || !file) {
+    alert("Please fill in all fields");
+    return;
+  }
+  
     const newEvent = {
       username: currentUser?.username,
       title,
